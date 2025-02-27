@@ -5,127 +5,266 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import CleverTap from 'clevertap-react-native';
+import React, { JSX, useEffect, useState } from 'react';
 import {
+  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   useColorScheme,
+  TouchableOpacity,
   View,
+  Image,
 } from 'react-native';
 
 import {
   Colors,
-  DebugInstructions,
   Header,
-  LearnMoreLinks,
-  ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
+function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+    useEffect(() => {
+    const myStuff = ['bag', 'shoes'];
+    const props = {
+      Name: 'N',
+      Identity: '30',
+      Email: 'an@gmail.com',
+      Phone: '+263154561234',
+      Gender: 'M',
+      DOB: new Date('1992-12-22T06:35:31'),
+      'MSG-email': false,
+      'MSG-push': true,
+      'MSG-sms': false,
+      'MSG-whatsapp': true,
+      Stuff: myStuff,
+    };
 
-  /*
-   * To keep the template simple and small we're adding padding to prevent view
-   * from rendering under the System UI.
-   * For bigger apps the reccomendation is to use `react-native-safe-area-context`:
-   * https://github.com/AppAndFlow/react-native-safe-area-context
-   *
-   * You can read more about it here:
-   * https://github.com/react-native-community/discussions-and-proposals/discussions/827
-   */
-  const safePadding = '5%';
+    CleverTap.onUserLogin(props);
 
+  }, []);
+
+  CleverTap.createNotificationChannel("henil123", "henil123", "CT React Native Testing", 5, true) // The notification channel importance can have any value from 1 to 5. A higher value means a more interruptive notification.
+  
+
+
+  useEffect(() => {
+    // Initialize CleverTap Inbox
+    CleverTap.initializeInbox();
+
+    // Listen for CleverTap inbox initialization
+    CleverTap.addListener(CleverTap.CleverTapInboxDidInitialize, (event: any) => {
+      console.log('CleverTap Inbox Initialized:', event);
+    });
+
+    // Listen for inbox message updates
+    CleverTap.addListener(CleverTap.CleverTapInboxMessagesDidUpdate, (event:any) => {
+      console.log('CleverTap Inbox Messages Updated:', event);
+    });
+
+    // Listen for inbox item click event
+    // CleverTap.addListener('CleverTapInboxItemClicked', (event:any) => {
+    //   console.log('Inbox Item Clicked:', event);
+    // });
+
+    // // Listen for inbox button click event
+    // CleverTap.addListener('CleverTapInboxButtonClicked', (event:any) => {
+    //   console.log('Inbox Button Clicked:', event);
+    // });
+
+    //Cleanup listeners on unmount
+    return () => {
+      CleverTap.removeListener(CleverTap.CleverTapInboxDidInitialize);
+      CleverTap.removeListener(CleverTap.CleverTapInboxMessagesDidUpdate);
+      CleverTap.removeListener('CleverTapInboxItemClicked');
+      CleverTap.removeListener('CleverTapInboxButtonClicked');
+    };
+  }, []);
+
+  // Show CleverTap Inbox with custom styling
+  const showCleverTapInbox = () => {
+    CleverTap.showInbox({
+      tabs: ['Offers', 'Promotions'],
+      navBarTitle: 'My App Inbox',
+      navBarTitleColor: '#FF0000',
+      navBarColor: '#FFFFFF',
+      inboxBackgroundColor: '#AED6F1',
+      backButtonColor: '#00FF00',
+      unselectedTabColor: '#0000FF',
+      selectedTabColor: '#FF0000',
+      selectedTabIndicatorColor: '#000000',
+      noMessageText: 'No message(s)',
+      noMessageTextColor: '#FF0000',
+    });
+  };
+
+  // Push notification event
+  const pushNotification = () => {
+    CleverTap.recordEvent('Push Notification Triggered', { 'Product name': 'Push Notification' });
+  };
+
+  // Record In-app event
+  const recordInAppEvent = () => {
+    CleverTap.recordEvent('In-app 3 Notification', { 'Product name': 'CleverTap React Native' });
+  };
+
+  // Record Inbox event
+  const recordInboxEvent = () => {
+    CleverTap.recordEvent('Inbox', { 'Inbox name': 'CleverTap React Native' });
+  };
+
+  const nativedisplay = () => {
+    CleverTap.recordEvent('Native Display', { 'Product name': 'CleverTap React Native' });
+  
+    // Fetch the display units explicitly when the button is clicked
+    CleverTap.getAllDisplayUnits((err, res) => {
+      if (err) {
+        console.error('Error fetching display units:', err);
+      } else {
+        console.log('Fetched Display Units:', res);
+        setDisplayUnits(Array.isArray(res) ? res : []);
+      }
+    });
+  };
+  
+  
+  // CleverTap.addListener(CleverTap.CleverTapDisplayUnitsLoaded, (data: any) => {
+  //   /* consume the event data */
+  //   CON
+  // });
+  //   CleverTap.getAllDisplayUnits((err, res) => {
+  //     console.log('All Display Units: ', res, err);
+  // });
+  // CleverTap.pushDisplayUnitViewedEventForID('Display Unit Id');
+  // CleverTap.pushDisplayUnitClickedEventForID('Display Unit Id');
+  const [displayUnits, setDisplayUnits] = useState<any[]>([]); // ✅ Ensures it's always an array
+
+  useEffect(() => {
+  CleverTap.addListener('CleverTapDisplayUnitsLoaded', (data:any) => {
+    console.log('Native Display Units Loaded:', data);
+
+    if (Array.isArray(data) && data.length > 0) {
+      setDisplayUnits(data);
+    }
+  });
+
+  CleverTap.getAllDisplayUnits((err, res) => {
+    if (err) {
+      console.error('Error fetching display units:', err);
+    } else {
+      console.log('Fetched Display Units:', res);
+      setDisplayUnits(Array.isArray(res) ? res : []);
+    }
+  });
+
+  return () => {
+    CleverTap.removeListener('CleverTapDisplayUnitsLoaded');
+  };
+}, []);
+
+  
   return (
-    <View style={backgroundStyle}>
+    <SafeAreaView style={backgroundStyle}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-        <View style={{paddingRight: safePadding}}>
-          <Header/>
-        </View>
+        <Header />
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            paddingHorizontal: safePadding,
-            paddingBottom: safePadding,
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+          <TouchableOpacity style={styles.button} onPress={pushNotification}>
+            <Text style={styles.buttonText}>Push Notification</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={recordInAppEvent}>
+            <Text style={styles.buttonText}>In-app 3 Notification</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={recordInboxEvent}>
+            <Text style={styles.buttonText}>Inbox Event</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={showCleverTapInbox}>
+            <Text style={styles.buttonText}>Open Inbox</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={nativedisplay}>
+            <Text style={styles.buttonText}>Native Display</Text>
+          </TouchableOpacity>
+          {displayUnits.length === 0 ? (
+            <Text style={{ textAlign: 'center', margin: 10 }}>No Native Display Units Available</Text>
+          ) : (
+            displayUnits.map((unit, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => CleverTap.pushDisplayUnitClickedEventForID(unit.unitID)}
+                style={styles.nativeDisplayContainer}
+              >
+                {unit.content?.[0] ? (
+                  <>
+                    <Image source={{ uri: unit.content[0].media?.url }} style={styles.nativeImage} />
+                    <Text style={styles.nativeTitle}>{unit.content[0].title?.text}</Text>
+                    <Text style={styles.nativeMessage}>{unit.content[0].message?.text}</Text>
+                  </>
+                ) : (
+                  <Text style={styles.nativeMessage}>No Content Available</Text>
+                )}
+              </TouchableOpacity>
+            ))
+          )}
+
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
+
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  button: {
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    marginBottom: 10,
+    alignItems: 'center',
+    borderRadius: 5,
   },
-  sectionTitle: {
-    fontSize: 24,
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
     fontWeight: '600',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  nativeDisplayContainer: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    marginBottom: 10,
   },
-  highlight: {
-    fontWeight: '700',
+  nativeImage: {
+    width: '100%',
+    height: 150,
+    borderRadius: 10,
+  },
+  nativeTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 8,
+  },
+  nativeMessage: {
+    fontSize: 14,
+    marginTop: 4,
   },
 });
+
 
 export default App;

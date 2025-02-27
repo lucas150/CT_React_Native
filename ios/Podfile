@@ -8,14 +8,27 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
+source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
+
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
   use_frameworks! :linkage => linkage.to_sym
 end
 
+target 'Notification Content Extension' do
+  pod 'CTNotificationContent'
+end
+ 
+target 'Notification Service Extension' do
+  pod 'CTNotificationService'
+end
+
 target 'ProjectReactNative' do
   config = use_native_modules!
+  flags=get_default_flags()
+  pod 'clevertap-react-native', :path => '../node_modules/clevertap-react-native'
 
   use_react_native!(
     :path => config[:reactNativePath],
