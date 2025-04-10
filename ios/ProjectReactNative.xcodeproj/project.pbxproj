@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -79,14 +79,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		078D53282D68821F00825C0C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		078D53282D68821F00825C0C /* Exceptions for "Notification Service Extension" folder in "Notification Service Extension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
 			target = 078D531F2D68821F00825C0C /* Notification Service Extension */;
 		};
-		078D53402D68827600825C0C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		078D53402D68827600825C0C /* Exceptions for "Notification Content Extension" folder in "Notification Content Extension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -96,8 +96,30 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		078D53212D68821F00825C0C /* Notification Service Extension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (078D53282D68821F00825C0C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "Notification Service Extension"; sourceTree = "<group>"; };
-		078D53362D68827600825C0C /* Notification Content Extension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (078D53402D68827600825C0C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "Notification Content Extension"; sourceTree = "<group>"; };
+		078D53212D68821F00825C0C /* Notification Service Extension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				078D53282D68821F00825C0C /* Exceptions for "Notification Service Extension" folder in "Notification Service Extension" target */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = "Notification Service Extension";
+			sourceTree = "<group>";
+		};
+		078D53362D68827600825C0C /* Notification Content Extension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				078D53402D68827600825C0C /* Exceptions for "Notification Content Extension" folder in "Notification Content Extension" target */,
+			);
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = "Notification Content Extension";
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -802,7 +824,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -882,7 +907,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

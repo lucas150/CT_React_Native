@@ -23,6 +23,7 @@ end
  
 target 'Notification Service Extension' do
   pod 'CTNotificationService'
+  pod 'CleverTap-iOS-SDK'
 end
 
 target 'ProjectReactNative' do
