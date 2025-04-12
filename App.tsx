@@ -7,9 +7,9 @@
 
 import CleverTap from 'clevertap-react-native';
 import React, { JSX, useEffect, useState } from 'react';
-// import messaging  from '@react-native-firebase/messaging';
-// import {PermissionsAndroid} from 'react-native';
-// PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+import messaging  from '@react-native-firebase/messaging';
+import {PermissionsAndroid} from 'react-native';
+import { Alert } from 'react-native';
 
 
 
@@ -30,8 +30,45 @@ import {
   Header,
 } from 'react-native/Libraries/NewAppScreen';
 
+
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log('Message handled in the background!', remoteMessage);
+  CleverTap.createNotification(remoteMessage.data);
+
+});
+
+
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+  
+  //permission for push 
+  PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+
+  //foreground state mesage 
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      const data = remoteMessage.data;
+
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      console.log(data);
+      CleverTap.createNotification(data);
+    });
+
+    return unsubscribe;
+  }, []);
+
+
+  const checkToken = async () => {
+    const fcmToken = await messaging().getToken();
+    if (fcmToken) {
+       console.log("FCM Token", fcmToken);
+       CleverTap.setFCMPushToken(fcmToken);
+
+    } 
+   }
+   
+   checkToken();
+
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -60,14 +97,7 @@ function App(): JSX.Element {
   CleverTap.createNotificationChannel("henil123", "henil123", "CT React Native Testing", 5, true) // The notification channel importance can have any value from 1 to 5. A higher value means a more interruptive notification.
   
 
-  // const checkToken = async () => {
-  //   const fcmToken = await messaging().getToken();
-  //   if (fcmToken) {
-  //      console.log("FCM Token", fcmToken);
-  //   } 
-  //  }
-   
-  //  checkToken();
+
 
 
   useEffect(() => {
