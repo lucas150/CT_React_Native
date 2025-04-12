@@ -7,6 +7,12 @@
 
 import CleverTap from 'clevertap-react-native';
 import React, { JSX, useEffect, useState } from 'react';
+// import messaging  from '@react-native-firebase/messaging';
+// import {PermissionsAndroid} from 'react-native';
+// PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+
+
+
 import {
   SafeAreaView,
   ScrollView,
@@ -34,9 +40,9 @@ function App(): JSX.Element {
     const myStuff = ['bag', 'shoes'];
     const props = {
       Name: 'N',
-      Identity: '30',
-      Email: 'an@gmail.com',
-      Phone: '+263154561234',
+      Identity: '32',
+      Email: 'alt@gmail.com',
+      Phone: '+916375456123',
       Gender: 'M',
       DOB: new Date('1992-12-22T06:35:31'),
       'MSG-email': false,
@@ -47,11 +53,21 @@ function App(): JSX.Element {
     };
 
     CleverTap.onUserLogin(props);
+    
 
   }, []);
 
   CleverTap.createNotificationChannel("henil123", "henil123", "CT React Native Testing", 5, true) // The notification channel importance can have any value from 1 to 5. A higher value means a more interruptive notification.
   
+
+  // const checkToken = async () => {
+  //   const fcmToken = await messaging().getToken();
+  //   if (fcmToken) {
+  //      console.log("FCM Token", fcmToken);
+  //   } 
+  //  }
+   
+  //  checkToken();
 
 
   useEffect(() => {
@@ -79,6 +95,8 @@ function App(): JSX.Element {
     // });
 
     //Cleanup listeners on unmount
+
+    
     return () => {
       CleverTap.removeListener(CleverTap.CleverTapInboxDidInitialize);
       CleverTap.removeListener(CleverTap.CleverTapInboxMessagesDidUpdate);
@@ -143,6 +161,8 @@ function App(): JSX.Element {
   // });
   // CleverTap.pushDisplayUnitViewedEventForID('Display Unit Id');
   // CleverTap.pushDisplayUnitClickedEventForID('Display Unit Id');
+
+
   const [displayUnits, setDisplayUnits] = useState<any[]>([]); // ✅ Ensures it's always an array
 
   useEffect(() => {
