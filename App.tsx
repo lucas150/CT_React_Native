@@ -8,7 +8,7 @@
 import CleverTap from 'clevertap-react-native';
 import React, { JSX, useEffect, useState } from 'react';
 import messaging  from '@react-native-firebase/messaging';
-import {PermissionsAndroid} from 'react-native';
+import {PermissionsAndroid, Platform} from 'react-native';
 import { Alert } from 'react-native';
 
 
@@ -49,7 +49,7 @@ function App(): JSX.Element {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       const data = remoteMessage.data;
 
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
       console.log(data);
       CleverTap.createNotification(data);
     });
@@ -62,7 +62,9 @@ function App(): JSX.Element {
     const fcmToken = await messaging().getToken();
     if (fcmToken) {
        console.log("FCM Token", fcmToken);
-       CleverTap.setFCMPushToken(fcmToken);
+       if(Platform.OS == 'android'){
+        CleverTap.setFCMPushToken(fcmToken);
+       }
 
     } 
    }
@@ -113,6 +115,15 @@ function App(): JSX.Element {
     CleverTap.addListener(CleverTap.CleverTapInboxMessagesDidUpdate, (event:any) => {
       console.log('CleverTap Inbox Messages Updated:', event);
     });
+
+    CleverTap.addListener(CleverTap.CleverTapInAppNotificationShowed, (event:any) => {
+      console.log("Showed")
+  });
+
+    // function _handleCleverTapEvent(test, event) {
+    //   console.log('CleverTap Event called - ', eventName, event);
+    // }
+
 
     // Listen for inbox item click event
     // CleverTap.addListener('CleverTapInboxItemClicked', (event:any) => {
