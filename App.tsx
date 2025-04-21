@@ -64,6 +64,7 @@ function App(): JSX.Element {
        console.log("FCM Token", fcmToken);
        if(Platform.OS == 'android'){
         CleverTap.setFCMPushToken(fcmToken);
+
        }
 
     } 
@@ -116,8 +117,9 @@ function App(): JSX.Element {
       console.log('CleverTap Inbox Messages Updated:', event);
     });
 
-    CleverTap.addListener(CleverTap.CleverTapInAppNotificationShowed, (event:any) => {
-      console.log("Showed")
+    CleverTap.addListener(CleverTap.CleverTapInAppNotificationShowed, () => {
+      console.log("INAPP NOTIFICATION SHOWN 123");
+    // paint()
   });
 
     // function _handleCleverTapEvent(test, event) {
