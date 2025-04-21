@@ -118,7 +118,9 @@ function App(): JSX.Element {
     });
 
     CleverTap.addListener(CleverTap.CleverTapInAppNotificationShowed, () => {
+      Alert.alert('In-app Notification', 'In-app notification shown');
       console.log("INAPP NOTIFICATION SHOWN 123");
+      // print('In-app notification shown');
     // paint()
   });
 
