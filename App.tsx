@@ -79,12 +79,14 @@ function App(): JSX.Element {
     useEffect(() => {
     const myStuff = ['bag', 'shoes'];
     const props = {
-      Name: 'N',
-      Identity: '32',
-      Email: 'alt@gmail.com',
+      Name: 'N1',
+      Identity: '3211',
+      Email: 'alt1@gmail.com',
       Phone: '+916375456123',
       Gender: 'M',
       DOB: new Date('1992-12-22T06:35:31'),
+      // 'Anniversary Date':new Date('1992-12-22T06:35:31'),
+      // 'DOB1': new Date('1992-12-22T06:35:31'),
       'MSG-email': false,
       'MSG-push': true,
       'MSG-sms': false,

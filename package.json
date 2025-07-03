@@ -10,7 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@react-native-firebase/app": "19.0.0",
+    "@react-native-firebase/app": "^21.14.0",
     "@react-native-firebase/messaging": "^21.13.0",
     "clevertap-react-native": "^3.4.0",
     "react": "19.0.0",
